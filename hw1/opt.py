@@ -45,13 +45,9 @@ from tensorflow.models.embedding import gen_word2vec as word2vec
 
 flags = tf.app.flags
 
-#flags.DEFINE_string("save_path", None, "Directory to write the model.")
 flags.DEFINE_string(
     "train_data", None,
     "Training data. E.g., unzipped file http://mattmahoney.net/dc/text8.zip.")
-'''flags.DEFINE_string(
-    "eval_data", None, "Analogy questions. "
-    "See README.md for how to get 'questions-words.txt'.")'''
 flags.DEFINE_integer("embedding_size", 200, "The embedding dimension size.")
 flags.DEFINE_integer(
     "epochs_to_train", 15,
