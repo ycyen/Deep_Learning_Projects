@@ -172,6 +172,9 @@ class Word2Vec(object):
     self._epoch = current_epoch
     self._words = total_words_processed
 
+    # Properly initialize all variables.
+    tf.initialize_all_variables().run()
+
   def _train_thread_body(self):
     initial_epoch, = self._session.run([self._epoch])
     while True:
@@ -209,12 +212,15 @@ class Word2Vec(object):
     for t in workers:
       t.join()
 
+def main(_):
+  """Train a word2vec model."""
+  opts = Options()
+  with tf.Graph().as_default(), tf.Session() as session:
+    with tf.device("/cpu:0"):
+      model = Word2Vec(opts, session)
+    for _ in xrange(opts.epochs_to_train):
+      model.train()  # Process one epoch
+    model.print_to_file()
 
-"""Train a word2vec model."""
-opts = Options()
-with tf.Graph().as_default(), tf.Session() as session:
-  with tf.device("/cpu:0"):
-    model = Word2Vec(opts, session)
-  for _ in xrange(opts.epochs_to_train):
-    model.train()  # Process one epoch
-  model.print_to_file()
+if __name__ == "__main__":
+  tf.app.run()
