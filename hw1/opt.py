@@ -120,14 +120,6 @@ class Options(object):
     # Subsampling threshold for word occurrence.
     self.subsample = FLAGS.subsample
 
-    # Where to write out summaries.
-    #self.save_path = FLAGS.save_path
-
-    # Eval options.
-
-    # The text file for eval.
-    self.eval_data = FLAGS.eval_data
-
 
 class Word2Vec(object):
   """Word2Vec model (Skipgram)."""
