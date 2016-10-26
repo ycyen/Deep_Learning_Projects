@@ -102,7 +102,7 @@ class Word2Vec(object):
   def print_to_file(self):
     opts = self._options
     a = self._session.run(self._w_in)
-    dir = "./word2vec.txt"
+    dir = "tmp/word2vec.txt"
     f = open(dir, 'w')
     for i in range(opts.vocab_size):
       f.write(self._id2word[i]+' ')

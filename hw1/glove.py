@@ -157,7 +157,7 @@ class GloVeModel():
             #print result
             self.print_embbedding()
             a = self.__embeddings
-            dir = "./glove.txt"
+            dir = "tmp/glove.txt"
             f = open(dir, 'w')
             for i in range(self.vocab_size):
                 f.write(self.__words[i]+' ')
