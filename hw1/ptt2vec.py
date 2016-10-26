@@ -198,6 +198,9 @@ class Word2Vec(object):
     self._epoch = current_epoch
     self._words = total_words_processed
 
+    # Properly initialize all variables.
+    tf.initialize_all_variables().run()
+
   def _train_thread_body(self):
     initial_epoch, = self._session.run([self._epoch])
     while True:
