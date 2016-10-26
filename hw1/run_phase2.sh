@@ -3,7 +3,7 @@
 echo Starting hw1 phase2:
 
 #run code
-python ptt2vec.py $1
+python ptt2vec.py --train_data=$1
 
 #filter
 python filterVocab.py fullVocab_phase2.txt < ptt2vec.txt > $2filter_vec.txt

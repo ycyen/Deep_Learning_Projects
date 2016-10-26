@@ -3,7 +3,7 @@
 echo Starting hw1 phase1:
 
 #run code
-python word2vec_opt.py $1
+python word2vec_opt.py --train_data=$1
 python glove.py $1
 
 #filter
