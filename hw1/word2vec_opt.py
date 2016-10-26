@@ -209,15 +209,12 @@ class Word2Vec(object):
     for t in workers:
       t.join()
 
-def main(_):
-  """Train a word2vec model."""
-  opts = Options()
-  with tf.Graph().as_default(), tf.Session() as session:
-    with tf.device("/cpu:0"):
-      model = Word2Vec(opts, session)
-    for _ in xrange(opts.epochs_to_train):
-      model.train()  # Process one epoch
-    model.print_to_file()
 
-if __name__ == "__main__":
-  main()
+"""Train a word2vec model."""
+opts = Options()
+with tf.Graph().as_default(), tf.Session() as session:
+  with tf.device("/cpu:0"):
+    model = Word2Vec(opts, session)
+  for _ in xrange(opts.epochs_to_train):
+    model.train()  # Process one epoch
+  model.print_to_file()
