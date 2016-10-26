@@ -220,4 +220,4 @@ def main(_):
     model.print_to_file()
 
 if __name__ == "__main__":
-  tf.app.run()
+  main()
