@@ -1,32 +1,3 @@
-# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
-
-"""Multi-threaded word2vec unbatched skip-gram model.
-
-Trains the model described in:
-(Mikolov, et. al.) Efficient Estimation of Word Representations in Vector Space
-ICLR 2013.
-http://arxiv.org/abs/1301.3781
-This model does true SGD (i.e. no minibatching). To do this efficiently, custom
-ops are used to sequentially process data within a 'batch'.
-
-The key ops used are:
-* skipgram custom op that does input processing.
-* neg_train custom op that efficiently calculates and applies the gradient using
-  true SGD.
-"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -45,24 +16,24 @@ from tensorflow.models.embedding import gen_word2vec as word2vec
 
 flags = tf.app.flags
 
-flags.DEFINE_string("train_data", "./corpus/text8", "Training data")
+flags.DEFINE_string("train_data", None, "Training data")
 flags.DEFINE_integer("embedding_size", 128, "The embedding dimension size.")
 flags.DEFINE_integer(
-    "epochs_to_train", 50,
+    "epochs_to_train", 15,
     "Number of epochs to train. Each epoch processes the training data once "
     "completely.")
-flags.DEFINE_float("learning_rate", 0.015, "Initial learning rate.")
-flags.DEFINE_integer("num_neg_samples", 25,
+flags.DEFINE_float("learning_rate", 0.2, "Initial learning rate.")
+flags.DEFINE_integer("num_neg_samples", 100,
                      "Negative samples per training example.")
-flags.DEFINE_integer("batch_size", 128,
-                     "Numbers of training examples each step processes "
-                     "(no minibatching).")
+flags.DEFINE_integer("batch_size", 16,
+                     "Number of training examples processed per step "
+                     "(size of a minibatch).")
 flags.DEFINE_integer("concurrent_steps", 12,
                      "The number of concurrent training steps.")
-flags.DEFINE_integer("window_size", 4,
+flags.DEFINE_integer("window_size", 5,
                      "The number of words to predict to the left and right "
                      "of the target word.")
-flags.DEFINE_integer("min_count", 7,
+flags.DEFINE_integer("min_count", 5,
                      "The minimum number of word occurrences for it to be "
                      "included in the vocabulary.")
 flags.DEFINE_float("subsample", 1e-3,

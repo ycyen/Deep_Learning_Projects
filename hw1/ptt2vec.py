@@ -45,27 +45,26 @@ from tensorflow.models.embedding import gen_word2vec as word2vec
 
 flags = tf.app.flags
 
-flags.DEFINE_string("save_path", "./tmp/", "Directory to write the model.")
 flags.DEFINE_string(
-    "train_data", "ptt_corpus.txt",
+    "train_data", None,
     "Training data. E.g., unzipped file http://mattmahoney.net/dc/text8.zip.")
 flags.DEFINE_integer("embedding_size", 128, "The embedding dimension size.")
 flags.DEFINE_integer(
     "epochs_to_train", 15,
     "Number of epochs to train. Each epoch processes the training data once "
     "completely.")
-flags.DEFINE_float("learning_rate", 0.03, "Initial learning rate.")
-flags.DEFINE_integer("num_neg_samples", 25,
+flags.DEFINE_float("learning_rate", 0.2, "Initial learning rate.")
+flags.DEFINE_integer("num_neg_samples", 100,
                      "Negative samples per training example.")
-flags.DEFINE_integer("batch_size", 128,
-                     "Numbers of training examples each step processes "
-                     "(no minibatching).")
+flags.DEFINE_integer("batch_size", 16,
+                     "Number of training examples processed per step "
+                     "(size of a minibatch).")
 flags.DEFINE_integer("concurrent_steps", 12,
                      "The number of concurrent training steps.")
-flags.DEFINE_integer("window_size", 4,
+flags.DEFINE_integer("window_size", 5,
                      "The number of words to predict to the left and right "
                      "of the target word.")
-flags.DEFINE_integer("min_count", 100,
+flags.DEFINE_integer("min_count", 5,
                      "The minimum number of word occurrences for it to be "
                      "included in the vocabulary.")
 flags.DEFINE_float("subsample", 1e-3,
@@ -116,9 +115,6 @@ class Options(object):
     # Subsampling threshold for word occurrence.
     self.subsample = FLAGS.subsample
 
-    # Where to write out summaries.
-    self.save_path = FLAGS.save_path
-
 class Word2Vec(object):
   """Word2Vec model (Skipgram)."""
 
@@ -128,16 +124,11 @@ class Word2Vec(object):
     self._word2id = {}
     self._id2word = []
     self.build_graph()
-    self.save_vocab()
 
-  def print_embedding(self):
-    print(self._session.run(self._w_in))
-  def print_word(self):
-    print(self._id2word)
   def print_to_file(self):
     opts = self._options
     a = self._session.run(self._w_in)
-    dir = "./ptt_vector_epo15_emb128.txt"
+    dir = "ptt2vec.txt"
     f = open(dir, 'w')
     for i in range(opts.vocab_size):
       f.write(self._id2word[i]+' ')
@@ -207,15 +198,6 @@ class Word2Vec(object):
     self._epoch = current_epoch
     self._words = total_words_processed
 
-  def save_vocab(self):
-    """Save the vocabulary to a file so the model can be reloaded."""
-    opts = self._options
-    with open(os.path.join(opts.save_path, "vocab.txt"), "w") as f:
-      for i in xrange(opts.vocab_size):
-        vocab_word = tf.compat.as_text(opts.vocab_words[i]).encode("utf-8")
-        f.write("%s %d\n" % (vocab_word,
-                             opts.vocab_counts[i]))
-
   def _train_thread_body(self):
     initial_epoch, = self._session.run([self._epoch])
     while True:
@@ -243,9 +225,7 @@ class Word2Vec(object):
       now = time.time()
       last_words, last_time, rate = words, now, (words - last_words) / (
           now - last_time)
-      print("Epoch %4d Step %8d: lr = %5.3f words/sec = %8.0f\r" % (epoch, step,
-                                                                    lr, rate),
-            end="")
+      print("Epoch %4d Step %8d: lr = %5.3f words/sec = %8.0f\r" % (epoch, step, lr, rate), end="")
       sys.stdout.flush()
       if epoch != initial_epoch:
         break
@@ -255,9 +235,6 @@ class Word2Vec(object):
 
 def main(_):
   """Train a word2vec model."""
-  if not FLAGS.train_data or not FLAGS.eval_data or not FLAGS.save_path:
-    print("--train_data --eval_data and --save_path must be specified.")
-    sys.exit(1)
   opts = Options()
   with tf.Graph().as_default(), tf.Session() as session:
     with tf.device("/cpu:0"):

@@ -1,6 +1,7 @@
 from __future__ import division
 from collections import Counter, defaultdict
 import os
+import sys
 from random import shuffle
 import tensorflow as tf
 
@@ -153,7 +154,7 @@ class GloVeModel():
             self.__embeddings = self.__combined_embeddings.eval()
             if should_write_summaries:
                 summary_writer.close()
-
+            #print result
             self.print_embbedding()
             a = self.__embeddings
             dir = "./glove.txt"
@@ -205,16 +206,6 @@ class GloVeModel():
             raise NotFitToCorpusError("Need to fit model to corpus before looking up word ids.")
         return self.__word_to_id[word]
 
-    def generate_tsne(self, path=None, size=(100, 100), word_count=1000, embeddings=None):
-        if embeddings is None:
-            embeddings = self.embeddings
-        from sklearn.manifold import TSNE
-        tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
-        low_dim_embs = tsne.fit_transform(embeddings[:word_count, :])
-        labels = self.words[:word_count]
-        return _plot_with_labels(low_dim_embs, labels, path, size)
-
-
 def _context_windows(region, left_size, right_size):
     for i, word in enumerate(region):
         start_index = i - left_size
@@ -254,7 +245,7 @@ print("Create model")
 
 #build corpus
 _corpus = list()
-with open('./corpus/text8') as file_:
+with open(sys.argv[1]) as file_:
     for line in file_:
         _corpus += line.strip().split(' ')
 corpus = [_corpus]
