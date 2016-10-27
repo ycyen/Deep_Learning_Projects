@@ -17,15 +17,15 @@ from tensorflow.models.embedding import gen_word2vec as word2vec
 flags = tf.app.flags
 
 flags.DEFINE_string("train_data", None, "Training data")
-flags.DEFINE_integer("embedding_size", 128, "The embedding dimension size.")
+flags.DEFINE_integer("embedding_size", 200, "The embedding dimension size.")
 flags.DEFINE_integer(
     "epochs_to_train", 15,
     "Number of epochs to train. Each epoch processes the training data once "
     "completely.")
-flags.DEFINE_float("learning_rate", 0.2, "Initial learning rate.")
+flags.DEFINE_float("learning_rate", 0.025, "Initial learning rate.")
 flags.DEFINE_integer("num_neg_samples", 100,
                      "Negative samples per training example.")
-flags.DEFINE_integer("batch_size", 16,
+flags.DEFINE_integer("batch_size", 500,
                      "Number of training examples processed per step "
                      "(size of a minibatch).")
 flags.DEFINE_integer("concurrent_steps", 12,

@@ -13,7 +13,7 @@ class NotFitToCorpusError(Exception):
 
 class GloVeModel():
     def __init__(self, embedding_size, context_size, max_vocab_size=70000, min_occurrences=4,
-                 scaling_factor=3.0/4.0, cooccurrence_cap=100, batch_size=512, learning_rate=0.05):
+                 scaling_factor=3.0/4.0, cooccurrence_cap=100, batch_size=512, learning_rate=0.33):
         self.embedding_size = embedding_size
         if isinstance(context_size, tuple):
             self.left_context, self.right_context = context_size
@@ -256,4 +256,4 @@ model.fit_to_corpus(corpus)
 print("done fit_to_corpus")
 
 #start training
-model.train(num_epochs=100)
+model.train(num_epochs=30)
