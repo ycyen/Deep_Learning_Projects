@@ -1,7 +1,7 @@
 import sys
 
 test_data = sys.argv[1]
-test_in = "/data/test/test.seq.in"
+test_in = "./data/ATIS_hw3/test/test.seq.in"
 df = open(test_in, 'w')
 
 with open(test_data) as f:

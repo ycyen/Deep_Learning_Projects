@@ -14,3 +14,4 @@ python3 run_multi-task_rnn.py --data_dir $data_dir \
       --task $task \
       --bidirectional_rnn $bidirectional_rnn
 
+cp ./model_hw3/test_results/tagging.txt $2

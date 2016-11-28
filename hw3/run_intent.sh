@@ -13,3 +13,5 @@ python3 run_multi-task_rnn.py --data_dir $data_dir \
       --max_sequence_length $max_sequence_length \
       --task $task \
       --bidirectional_rnn $bidirectional_rnn
+
+cp ./model_hw3/test_results/intent.txt $2
