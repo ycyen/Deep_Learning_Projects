@@ -56,6 +56,7 @@ tf.app.flags.DEFINE_float("dropout_keep_prob", 0.5,
 tf.app.flags.DEFINE_boolean("bidirectional_rnn", True,
                             "Use birectional RNN")
 tf.app.flags.DEFINE_string("task", None, "Options: joint; intent; tagging")
+tf.app.flags.DEFINE_string("out_dir", None, "Output_file")
 FLAGS = tf.app.flags.FLAGS
     
 if FLAGS.max_sequence_length == 0:
@@ -259,14 +260,14 @@ def train():
 
       if task['intent'] == 1:
         print(hyp_label_list)
-        intentFile = open(intent_test_out_file, "w")
+        intentFile = open(out_dir, "w")
         for x in hyp_label_list:
           intentFile.write(x+'\n')
         intentFile.close()
 
       if task['tagging'] == 1:
         print(hyp_tag_list)
-        taggingFile = open(tagging_test_out_file, "w")
+        taggingFile = open(out_dir, "w")
         for x in hyp_tag_list:
           taggingFile.write("O "+" ".join(x)+'\n')
         taggingFile.close()
