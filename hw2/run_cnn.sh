@@ -2,6 +2,8 @@
 
 inFile="./data/dataset_cnn_eng/testing_data.txt"
 outFile="./predicition.upload"
+inFile=$1
+outFile=$2
 #echo inputfile $1
 #echo outputfile $2
 
