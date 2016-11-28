@@ -43,7 +43,7 @@ tf.app.flags.DEFINE_integer("max_train_data_size", 0,
                             "Limit on the size of training data (0: no limit).")
 tf.app.flags.DEFINE_integer("steps_per_checkpoint", 300,
                             "How many training steps to do per checkpoint.")
-tf.app.flags.DEFINE_integer("max_training_steps", 10000,
+tf.app.flags.DEFINE_integer("max_training_steps", 20000,
                             "Max training steps.")
 tf.app.flags.DEFINE_integer("max_test_data_size", 0,
                             "Max size of test set.")
@@ -135,7 +135,8 @@ def create_single_model(session, source_vocab_size, target_vocab_size, label_voc
           task=task)
 
   ckpt = tf.train.get_checkpoint_state(FLAGS.train_dir)
-  if ckpt and tf.gfile.Exists(ckpt.model_checkpoint_path):
+  #if ckpt and tf.gfile.Exists(ckpt.model_checkpoint_path):
+  if ckpt and ckpt.model_checkpoint_path:
     print("Reading model parameters from %s" % ckpt.model_checkpoint_path)
     model_train.saver.restore(session, ckpt.model_checkpoint_path)
   else:
