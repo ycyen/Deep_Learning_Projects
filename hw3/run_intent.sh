@@ -3,7 +3,7 @@
 python3 parse.test.py $1
 
 data_dir=data/ATIS_hw3
-model_dir=model_hw3
+model_dir=model_hw3_gpu
 max_sequence_length=50  # max length for train/valid/test sequence
 task=joint  # available options: intent; tagging; joint
 bidirectional_rnn=True  # available options: True; False
