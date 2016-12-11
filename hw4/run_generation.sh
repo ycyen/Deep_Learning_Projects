@@ -10,4 +10,4 @@ python translate.py --decode --data_dir NLG_data --train_dir nlg_model\
 echo done!
 tail -n +2 answer.tmp | cut -c 3- > $2
 rm answer.tmp
-#rm test.tmp
+rm test.tmp
